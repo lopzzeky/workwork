@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pregunta</title>
+    <!-- 1. Enlace a Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- 2. Tu archivo CSS personalizado -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="bg-light d-flex align-items-center vh-100">
+    
+    <!-- Centramos el contenido horizontalmente -->
+    <div class="container d-flex justify-content-center">
+        
+        <!-- Usamos una tarjeta (card) de Bootstrap, con sombra (shadow) y padding (p-4) -->
+        <div class="card border-0 shadow p-4 p-md-5 w-100" style="max-width: 600px;">
+            
+            <!-- Título de la pregunta -->
+            <h3 class="text-center text-dark mb-4 fw-bold">
+                {{ pregunta.pregunta }}
+            </h3>
+            
+            <!-- d-grid gap-3 crea una lista de botones apilados con espacio entre ellos -->
+            <form method="POST" class="d-grid gap-3">
+                <!-- loop.index0 es un contador de Jinja que empieza en 0 -->
+                {% for opcion in pregunta.opciones %}
+                    <!-- btn btn-outline-primary crea un botón con borde azul que se rellena al pasar el mouse -->
+                    <button type="submit" name="opcion" value="{{ loop.index0 }}" class="btn btn-outline-primary btn-lg p-3 text-start fw-semibold transition-base">
+                        {{ opcion }}
+                    </button>
+                {% endfor %}
+            </form>
+
+        </div>
+    </div>
+
+</body>
+</html>
