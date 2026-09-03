@@ -1,0 +1,14 @@
+/* Eliminamos las clases .ancho y .grid-roles porque Bootstrap ya hace eso */
+
+.tarjeta-rol {
+    /* Mantenemos solo la transición suave para la animación */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.tarjeta-rol:hover {
+    /* El efecto de "saltar" hacia arriba */
+    transform: translateY(-8px);
+    /* Una sombra más fuerte al pasar el ratón (!important vence a Bootstrap) */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15) !important;
+}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Elige tu Rol</title>
+    <!-- 1. Enlace a Bootstrap 5 (Va primero) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- 2. Tu archivo CSS (Va después para que puedas sobreescribir estilos si quieres) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="bg-light d-flex align-items-center vh-100">
+    <!-- Usamos 'container' de Bootstrap y limitamos el ancho máximo -->
+    <div class="container text-center" style="max-width: 800px;">
+        <h1 class="mb-3 text-dark fw-bold">¡Bienvenido al Equipo!</h1>
+        <p class="text-secondary mb-4">Selecciona tu nivel para comenzar la evaluación:</p>
+        
+        <!-- Reemplazamos tu clase grid-roles con flexbox de Bootstrap -->
+        <div class="d-flex justify-content-center flex-wrap gap-4 mt-4">
+            
+            {% for rol in roles %}
+            <!-- Usamos la clase 'card', 'shadow-sm' y 'text-decoration-none' de Bootstrap -->
+            <a href="{{ url_for('iniciar', rol_id=rol['id']) }}" class="tarjeta-rol card border-0 shadow-sm p-4 text-decoration-none" style="border-top: 5px solid {{ rol['color'] }} !important; width: 240px;">
+                <!-- Usamos 'display-4' para hacer el emoji grande -->
+                <div class="display-4 mb-2">{{ rol['emoji'] }}</div>
+                
+                <h2 class="h5 fw-bold" style="color: {{ rol['color'] }};">{{ rol['titulo'] }}</h2>
+                <p class="text-secondary small mb-0">{{ rol['descripcion'] }}</p>
+            </a>
+            {% endfor %}
+            
+        </div>
+    </div>
+</body>
+</html>
