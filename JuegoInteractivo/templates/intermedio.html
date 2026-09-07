@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Siguiente Fase · Innova</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <!-- El bloque exacto que pediste, con un pequeño ajuste de ancho máximo para que parezca una tarjeta -->
+  <div style="text-align: center; margin-top: 40px; padding: 40px 30px; background: var(--paper-2); border-bottom: 4px solid var(--steel-2); max-width: 600px; width: 100%; box-shadow: 6px 6px 0 rgba(0,0,0,.35);">
+      <h2 style="color: var(--ink); margin-bottom: 15px; font-size: 2rem; font-family: var(--font-display);">¡Aún no terminamos!</h2>
+      <p style="color: var(--ink); margin-bottom: 40px; font-size: 1.1rem; line-height: 1.5;">
+          Terminamos la teoría. Ahora pondremos a prueba tu atención bajo presión en el entorno real.
+      </p>
+      
+      <a href="{{ url_for('reto_atencion') }}" class="btn-reto-final">
+          Iniciar Reto Final 🎲
+      </a>
+  </div>
+
+</body>
+</html>

@@ -44,7 +44,7 @@ PREGUNTAS = {
         {
             "pregunta": "Llegas a la oficina, dejas tus cosas y te vas directo a la sala de descanso. ¿Qué paso obligatorio te saltaste?",
             "opciones": [
-                "A) Firmar tu entrada y salida del día.",
+                "A) Firmar la entrada junto con la hora en la que se llego.",
                 "B) Pedir permiso para tomar café.",
                 "C) Nada, así se hace siempre en Innova."
             ],
@@ -52,14 +52,14 @@ PREGUNTAS = {
             "explicacion": "Es obligatorio firmar la entrada y salida diariamente (T3)."
         },
         {
-            "pregunta": "Llega el ansiado viernes y decides venir con esa camiseta manchada y tu mochila de la suerte. Al llegar a la puerta...",
+            "pregunta": "Llega el ansiado viernes y decides venir con esa camisa manchada y desarreglado. Al llegar a la puerta...",
             "opciones": [
                 "A) Entras triunfante porque los viernes todo se vale.",
-                "B) Te devuelven: debes cuidar tu higiene y presentación, y está prohibido ingresar con mochila.",
-                "C) Escondes la mochila bajo la camiseta y pasas rápido."
+                "B) Te devuelven: debes cuidar tu higiene y presentación.",
+                "C) Entras sin que nadie note la camisa y pasas rápido."
             ],
             "correcta": 1,
-            "explicacion": "Reglas T3 y T5: cuidar la higiene y presentación personal, vestimenta adecuada, y no ingresar con mochila al interior de la empresa."
+            "explicacion": "Es de vital importancia cuidar la higiene y presentación personal, ademas de tener una vestimenta adecuada (T5)."
         },
         {
             "pregunta": "Antes de entregarle una herramienta o equipo a un cliente o a un compañero, ¿qué debes hacer primero?",
@@ -90,11 +90,21 @@ PREGUNTAS = {
             ],
             "correcta": 1,
             "explicacion": "2 faltas sin avisar significan la suspensión inmediata de tu práctica."
+        },
+        {
+            "pregunta": "Decides tener un 'martes de misterio' y faltas 2 veces seguidas sin avisar a nadie. ¿Qué pasa con tu práctica?",
+            "opciones": [
+                "A) Te ganas un premio a la desaparición del mes.",
+                "B) Tu práctica se suspende.",
+                "C) El líder de equipo te invita a un café para hablar de la vida."
+            ],
+           "correcta": 1,
+            "explicacion": "2 faltas sin avisar significan la suspensión inmediata de tu práctica."
         }
     ],
     "Trabajador": [
         {
-            "pregunta": "Estás en terreno y te das cuenta de que el Alicate Universal T3 desapareció de tu cinturón. ¿Qué haces?",
+            "pregunta": "Estás en terreno y te das cuenta de que el Alicate Universal desapareció de tu cinturón. ¿Qué haces?",
             "opciones": [
                 "A) Comprar uno igual en la ferretería de la esquina y no decir nada.",
                 "B) Culpar al practicante nuevo, siempre funciona.",
@@ -107,7 +117,7 @@ PREGUNTAS = {
             "pregunta": "Un cliente muy simpático te pide tu WhatsApp personal para 'coordinar más rápido'. Tu respuesta correcta es:",
             "opciones": [
                 "A) '¡Claro! Aquí tiene, y le paso mi Instagram también'.",
-                "B) 'Pásame el tuyo y te hago una llamada perdida'.",
+                "B) 'Pásame el tuyo y te llamo cuando pueda'.",
                 "C) 'Por políticas de la empresa está prohibido usar teléfonos personales para hablar con clientes'."
             ],
             "correcta": 2,
@@ -161,7 +171,7 @@ PREGUNTAS = {
                 "C) Aceptable si es 'solo una talla'."
             ],
             "correcta": 0,
-            "explicacion": "Está prohibido el acoso sexual y laboral (T0), con tolerancia cero."
+            "explicacion": "Está prohibido el acoso sexual y laboral (T0)."
         }
     ],
     "lider": [
@@ -244,7 +254,7 @@ def pregunta():
     preguntas_rol = PREGUNTAS.get(rol_actual, [])
 
     if session['pregunta_actual'] >= len(preguntas_rol):
-        return redirect(url_for('resultado'))
+        return render_template('intermedio.html') # <--- NUEVA LÍNEA
 
     pregunta_actual = preguntas_rol[session['pregunta_actual']]
     rol_info = next((r for r in ROLES if r['id'] == rol_actual), {})
@@ -278,6 +288,10 @@ def pregunta():
         numero=session['pregunta_actual'] + 1,
         total=len(preguntas_rol)
     )
+# RUTA JUEGO DE DADOS
+@app.route('/reto_atencion')
+def reto_atencion():
+    return render_template('juego_dados.html')
 
 # RUTA 4: Resultados
 @app.route('/resultado')

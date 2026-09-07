@@ -3,15 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Manual de Campo · Innova</title>
+<title>Formulario · Innova</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
   <div class="inicio-wrap">
-    <h1 class="inicio-titulo">Manual de campo · Innova</h1>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo Innova" class="logo-innova">
+    <h1 class="inicio-titulo">Rol · Innova System</h1>
     <p class="inicio-sub">Elige tu credencial para poner a prueba lo que sabes del reglamento.</p>
+    <h2 class="inicio-sub">Objetivo de Innova System Spa:   "SUPERAR LAS EXPECTATIVAS DE NUESTROS CLIENTES"</h2>    
+    <p class="inicio-sub">Dato importante: T(X) = Se tolera no mas ni menos de X veces </p>
 
     <div class="badges-row">
       {% for rol in roles %}
