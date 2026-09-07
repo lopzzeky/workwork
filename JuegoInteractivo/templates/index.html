@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Manual de Campo · Innova</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="inicio-wrap">
+    <h1 class="inicio-titulo">Manual de campo · Innova</h1>
+    <p class="inicio-sub">Elige tu credencial para poner a prueba lo que sabes del reglamento.</p>
+
+    <div class="badges-row">
+      {% for rol in roles %}
+      <a href="{{ url_for('iniciar', rol_id=rol['id']) }}" class="badge-card" style="--accent: {{ rol['color'] }};">
+        <div class="badge-icon">
+          {% if rol['id'] == 'nuevo_ingreso' %}
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v6M12 9c-3 0-5 2.5-5 6v3h10v-3c0-3.5-2-6-5-6Z"/><path d="M7 21h10"/></svg>
+          {% elif rol['id'] == 'Trabajador' %}
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a3 3 0 1 0-4.2 4.2L4 17v3h3l6.5-6.5a3 3 0 0 0 4.2-4.2l-2.1 2.1-2-2 2.1-2.1Z"/></svg>
+          {% else %}
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/><circle cx="12" cy="12" r="4"/></svg>
+          {% endif %}
+        </div>
+        <div class="badge-nivel">Nivel {{ loop.index }}</div>
+        <h2 class="badge-titulo">{{ rol['titulo'] }}</h2>
+        <p class="badge-desc">{{ rol['descripcion'] }}</p>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</body>
+</html>
