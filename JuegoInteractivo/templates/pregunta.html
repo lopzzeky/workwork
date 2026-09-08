@@ -14,6 +14,14 @@
       <span class="nivel">{{ rol.titulo }}</span>
       <span class="contador">Misión {{ numero }} de {{ total }}</span>
     </div>
+
+    <!-- NUEVO: Esta etiqueta verifica si la pregunta en el backend tiene una "imagen" -->
+    {% if pregunta.imagen %}
+    <div class="mision-imagen" style="text-align: center; margin: 15px 0;">
+      <img src="{{ url_for('static', filename=pregunta.imagen) }}" alt="Contexto visual de la pregunta" style="max-width: 100%; border-radius: 8px;">
+    </div>
+    {% endif %}
+
     <h3 class="mision-pregunta">{{ pregunta.pregunta }}</h3>
     <form method="POST" class="opciones">
       {% for opcion in pregunta.opciones %}

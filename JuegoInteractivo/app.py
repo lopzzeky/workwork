@@ -42,20 +42,22 @@ PREGUNTAS = {
             "explicacion": "Es obligatorio cuidar los EPP y herramientas entregadas para trabajar (T3)."
         },
         {
-            "pregunta": "Llegas a la oficina, dejas tus cosas y te vas directo a la sala de descanso. ¿Qué paso obligatorio te saltaste?",
+            "pregunta": "Llegas a la oficina, dejas tus cosas y como no tienes nada que hacer, empiezas a jugar con el celular. ¿Qué paso obligatorio te saltaste?",
+            "imagen": "oficina.png",
             "opciones": [
                 "A) Firmar la entrada junto con la hora en la que se llego.",
                 "B) Pedir permiso para tomar café.",
-                "C) Nada, así se hace siempre en Innova."
+                "C) Luego me acordare firmar."
             ],
             "correcta": 0,
             "explicacion": "Es obligatorio firmar la entrada y salida diariamente (T3)."
         },
         {
-            "pregunta": "Llega el ansiado viernes y decides venir con esa camisa manchada y desarreglado. Al llegar a la puerta...",
+            "pregunta": "Llega el ansiado viernes y decides venir con esa camisa manchada y desarreglado/a. Al llegar a la puerta...",
+            "imagen": "camisa.png",
             "opciones": [
                 "A) Entras triunfante porque los viernes todo se vale.",
-                "B) Te devuelven: debes cuidar tu higiene y presentación.",
+                "B) Te llaman la atención: debes cuidar tu higiene y presentación.",
                 "C) Entras sin que nadie note la camisa y pasas rápido."
             ],
             "correcta": 1,
@@ -72,10 +74,10 @@ PREGUNTAS = {
             "explicacion": "Es obligatorio hacer testeo y limpieza de los equipos antes de entregarlos (T3)."
         },
         {
-            "pregunta": "Terminaste tu turno y tu mesa de trabajo parece zona de guerra. ¿Qué corresponde hacer antes de irte?",
+            "pregunta": "Terminaste tu turno y tu mesa de trabajo es un desorden. ¿Qué corresponde hacer antes de irte?",
             "opciones": [
                 "A) Dejarlo para el turno siguiente, que ellos se las arreglen.",
-                "B) Ordenar y limpiar tu lugar de trabajo.",
+                "B) Ordenar y limpiar, ya que espero lo mismo para mi.",
                 "C) Cerrar la puerta y que nadie lo note."
             ],
             "correcta": 1,
@@ -92,14 +94,14 @@ PREGUNTAS = {
             "explicacion": "2 faltas sin avisar significan la suspensión inmediata de tu práctica."
         },
         {
-            "pregunta": "Decides tener un 'martes de misterio' y faltas 2 veces seguidas sin avisar a nadie. ¿Qué pasa con tu práctica?",
+            "pregunta": "Misteriosamente se pierde un herramienta o equipo de trabajo y soy el/la útilmo/a en haberlo utilizado, alguen nota la herramienta faltante y lo comunica, por lo que...",
             "opciones": [
-                "A) Te ganas un premio a la desaparición del mes.",
-                "B) Tu práctica se suspende.",
-                "C) El líder de equipo te invita a un café para hablar de la vida."
+                "A) Me quedo callado pensando que nadie me vio",
+                "B) Trato de no ser un sospechoso",
+                "C) Informo todo lo que paso y hasta que punto lo utilice"
             ],
-           "correcta": 1,
-            "explicacion": "2 faltas sin avisar significan la suspensión inmediata de tu práctica."
+           "correcta": 2,
+            "explicacion": "Avisar sobre la perdida de alguna herramienta o equipo de trabajo es fundamental con (T3)"
         }
     ],
     "Trabajador": [
@@ -288,6 +290,7 @@ def pregunta():
         numero=session['pregunta_actual'] + 1,
         total=len(preguntas_rol)
     )
+
 # RUTA JUEGO DE DADOS
 @app.route('/reto_atencion')
 def reto_atencion():
