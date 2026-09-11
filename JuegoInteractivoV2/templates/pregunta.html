@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Misión en curso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="mision-card" style="--accent-role: {{ rol.color }};">
+    <div class="mision-meta">
+      <span class="nivel">{{ rol.titulo }}</span>
+      <span class="contador">Misión {{ numero }} de {{ total }}</span>
+    </div>
+
+    <!-- Esta etiqueta verifica si la pregunta en el backend tiene una "imagen" -->
+    {% if pregunta.imagen %}
+    <div class="mision-imagen" style="text-align: center; margin: 15px 0;">
+      <img src="{{ url_for('static', filename=pregunta.imagen) }}" alt="Contexto visual de la pregunta" style="max-width: 100%; border-radius: 8px;">
+    </div>
+    {% endif %}
+
+    <h3 class="mision-pregunta">{{ pregunta.pregunta }}</h3>
+    <form method="POST" class="opciones">
+      {% for opcion in pregunta.opciones %}
+      <button type="submit" name="opcion" value="{{ loop.index0 }}" class="opcion-btn">{{ opcion }}</button>
+      {% endfor %}
+    </form>
+  </div>
+</body>
+</html>

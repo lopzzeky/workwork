@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Formulario · Innova</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- Aquí es donde carga tu style.css que ahora tiene todo el código -->
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="inicio-wrap">
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo Innova" class="logo-innova">
+    <h1 class="inicio-titulo">Rol · Innova System</h1>
+    <p class="inicio-sub">Elige tu credencial para poner a prueba lo que sabes del reglamento.</p>
+    <h2 class="inicio-sub" style="color: #2A9D8F;">Objetivo de Innova System Spa:<br>"SUPERAR LAS EXPECTATIVAS DE NUESTROS CLIENTES"</h2>    
+
+    <!-- BOTÓN PARA ABRIR EL MODAL -->
+    <a href="#modal-reglas" class="btn-reglas">📜 Leer Reglas de Operaciones Innova (obligatorio)</a>
+
+    <div class="badges-row">
+      <!-- Mostramos directamente la credencial asignada y al hacer clic, comienza el cuestionario -->
+      <a href="{{ url_for('iniciar') }}" class="badge-card" style="--accent: {{ rol.color }};">
+        <div class="badge-icon">
+          {% if rol.id == 'nuevo_ingreso' %}
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v6M12 9c-3 0-5 2.5-5 6v3h10v-3c0-3.5-2-6-5-6Z"/><path d="M7 21h10"/></svg>
+          {% elif rol.id == 'Trabajador' %}
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a3 3 0 1 0-4.2 4.2L4 17v3h3l6.5-6.5a3 3 0 0 0 4.2-4.2l-2.1 2.1-2-2 2.1-2.1Z"/></svg>
+          {% else %}
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/><circle cx="12" cy="12" r="4"/></svg>
+          {% endif %}
+        </div>
+        <h2 class="badge-titulo">{{ rol.titulo }}</h2>
+        <p class="badge-desc">{{ rol.descripcion }}</p>
+        
+        <div style="margin-top: 15px; font-weight: bold; text-decoration: underline;">Comenzar Misión ➔</div>
+      </a>
+    </div>
+
+    <!-- BOTÓN PARA CERRAR SESIÓN -->
+    <div style="margin-top: 40px; text-align: center;">
+      <a href="{{ url_for('logout') }}" class="btn-reglas" style="background-color: var(--bad); color: white; border-color: var(--bad);">🚪 Cerrar Sesión</a>
+    </div>
+
+  <!-- ESTRUCTURA DEL MODAL DE REGLAS -->
+  <div id="modal-reglas" class="modal-overlay">
+    <div class="modal-content">
+      <a href="#" class="modal-close" title="Cerrar">&times;</a>
+      <h2 style="font-family: 'Space Grotesk'; color: #1E293B; margin-top: 0;">Códice de Operaciones Innova</h2>
+      <p style="color: #64748B; font-size: 0.95rem;">Estas normativas garantizan nuestro profesionalismo y seguridad. Es obligatorio leer el reglamento interno. T3<span class="t-badge">T(X)= Límite estricto de X tolerancias.</span></p>
+      
+      <div class="pilares-grid">
+        
+        <!-- Pilar 1 -->
+        <div class="pilar-card" style="border-left-color: #E63946;">
+          <h3> Conducta y Tolerancia Cero</h3>
+          <ul>
+            <li>Prohibido acoso sexual y laboral. <span class="t-badge t-rojo">T0</span></li>
+            <li>Prohibido fumar, beber alcohol o consumir drogas dentro del establecimiento. <span class="t-badge t-rojo">T0</span></li>
+            <li>Tolerancia 0 con el Bullying.<span class="t-badge t-rojo">T0</li>
+            <li>Prohibido llegar a su trabajo en estado de ebriedad. <span class="t-badge">T3</span></li>
+            <li>Prohibido tomar trabajos particulares con nuestros clientes. <span class="t-badge">T1</span></li>
+            <li>Prohibido utilizar los teléfonos PERSONALES para hablar con los clientes. <span class="t-badge">T5</span></li>
+            <li>Prohibido el uso de ELEMENTOS que sean conductores de electricidad. <span class="t-badge">T3</span></li>
+            <li>No dormir en los lugares de trabajo. <span class="t-badge">T5</span></li>
+            <li>Cuida tu lenguaje y vocabulario. <span class="t-badge">T3</span></li>
+            <li>Mantener un trato respetuoso al cliente y en general. <span class="t-badge">T3</span></li>
+            <li>Las felicitaciones son en público y los llamados de atención en privado.</li>
+          </ul>
+        </div>
+
+        <!-- Pilar 2 -->
+        <div class="pilar-card" style="border-left-color: #E63946;">
+          <h3> Terreno y Vehículos</h3>
+          <ul>
+            <li>Vehículos deben portar: Chaleco reflectante, Botiquín, Triángulo, Cable para traspaso de corriente. <span class="t-badge">T3</span></li>
+            <li>El vehículo debe portar como mínimo: Alicates, Llaves, Destornillador, Cables para traspaso de corriente. <span class="t-badge">T3</span></li>
+            <li>Vehículo: Cinturón de seguridad, prohibido usar teléfono, Máx 60 kp/h en ciudad. <span class="t-badge">T3</span></li>
+            <li>Respetar velocidad máx en ruta y normas de tránsito. <span class="t-badge">T3</span></li>
+            <li>Revisar agua, aceite y neumáticos al salir a terreno. <span class="t-badge">T3</span></li>
+            <li>Portar carnet y licencia de conducir. Documentos del vehículo al día. <span class="t-badge">T3</span></li>
+            <li>No entregar vehículo de trabajo a personas sin licencia de conducir. <span class="t-badge">T3</span></li>
+            <li>No dejar vehículo abierto. Revisar: Extintor, Gata, Chaleco geólogo. <span class="t-badge">T3</span></li>
+            <li>No dejar los autos en la calle, usar estacionamiento. <span class="t-badge">T3</span></li>
+            <li>Mantener limpios los vehículos. <span class="t-badge">T5</span></li>
+            <li>Esperar 15 min como Max al cliente con visitas coordinadas, sino avisar al supervisor.</li>
+          </ul>
+        </div>
+
+        <!-- Pilar 3 -->
+        <div class="pilar-card" style="border-left-color: #457B9D;">
+          <h3> Asistencia, EPP y Herramientas.</h3>
+          <ul>
+            <li>Es obligatorio firmar la entrada y salida diariamente. <span class="t-badge">T3</span></li>
+            <li>Avisar al grupo Innova horario, ingreso y salida. <span class="t-badge">T3</span></li>
+            <li>Habrá tolerancia de 15 min por los atrasos, siempre con aviso previo.</li>
+            <li>2 faltas sin avisar se suspende práctica.<span class="t-badge t-rojo">T2</li>
+            <li>Permisos se piden con 24 horas de anticipación.</li>
+            <li>Avisar en caso de pérdida de alguna herramienta o equipo de trabajo. <span class="t-badge">T3</span></li>
+            <li>Es obligatorio cuidar los EPP y herramientas entregadas para trabajar. <span class="t-badge">T3</span></li>
+            <li>Guardar herramientas donde corresponde. <span class="t-badge">T3</span></li>
+            <li>Hacer testeo y limpieza de los equipos antes de entregarlos. <span class="t-badge">T3</span></li>
+            <li>Avisar en caso de accidente laboral o de trayecto. <span class="t-badge">T2</span></li>
+            <li>Avisar en caso de cualquier problema de salud o de contraer COVID 19. <span class="t-badge">T2</span></li>
+            <li>Persona que va de vacaciones debe terminar los trabajos o dejar encargado a quien suple.</li>
+            <li>No ingresar con mochila al interior de la empresa. <span class="t-badge">T3</span></li>
+          </ul>
+        </div>
+
+        <!-- Pilar 4 -->
+        <div class="pilar-card" style="border-left-color: #F4A261;">
+          <h3> Cultura, Metodologías y Beneficios</h3>
+          <ul>
+            <li>Cuidar la higiene y presentación personal. <span class="t-badge">T5</span></li>
+            <li>Vestimenta adecuada al trabajo. <span class="t-badge">T3</span></li>
+            <li>Mantener orden y limpieza en su lugar de trabajo. <span class="t-badge">T5</span></li>
+            <li><strong>Metodología 5S's:</strong> Clasificación (Seiri), Organización (Seiton), Limpieza (Seiso), Estandarizar (Seiketsu) y Seguir mejorando (Shitsuke).</li>
+            <li><strong>Habilidades y Competencias:</strong> Escucha activa (escuchar y entender al emisor), Creatividad e innovación, Proactividad e iniciativa, Inteligencia emocional, Poder de negociación, Facilidad de aprendizaje, Autoconocimiento, Autodesarrollo, Orientación al cliente, Resolución de problemas, Trabajo en equipo, Relaciones interpersonales, y Habilidad para trabajar efectivamente con otras personas.</li>
+            <li><strong>Comunicación Efectiva:</strong> Empatía (ponerse en el lugar del otro o del emisor), Mensaje claro y conciso, Capacidad de transmitir información con claridad, y Capacidad de entender la información recibida.</li>
+            <li><strong>Beneficios y Clima Laboral:</strong> Celebración día de cumpleaños, Flexibilidad en los permisos, Desarrollo profesional y técnico, Aguinaldos, Recreación, Charlas motivacionales, Buen clima laboral, y Capacitaciones.</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

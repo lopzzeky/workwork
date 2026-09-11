@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Añadir Perfil · Innova</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<style>
+  select.opcion-btn:hover {
+    background: var(--paper) !important;
+    color: var(--ink) !important;
+  }
+</style>
+</head>
+<body>
+  <div class="mision-card">
+    <h2 class="inicio-titulo" style="text-align: center; margin-bottom: 20px;">Añadir Nuevo Perfil</h2>
+    
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div style="color: var(--ok); text-align: center; margin-bottom: 15px; font-weight: bold; background: var(--paper-2); padding: 10px; border-radius: 5px;">
+        {% for message in messages %}
+          {{ message }}
+        {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('crear_usuario') }}" class="opciones">
+      <input type="text" name="nombre" class="opcion-btn" placeholder="Nombre completo" required>
+      
+      <!-- Campo RUT con validador en tiempo real -->
+      <input type="text" name="rut" id="rut" class="opcion-btn" placeholder="RUT (Ej: 12.345.678-9)" required oninput="formatearYValidarRUT(this)">
+      <p id="rut-error" style="color: var(--bad); display: none; text-align: left; font-size: 0.85rem; margin-top: -10px; margin-bottom: 10px; font-weight: bold;">❌ RUT Inválido</p>
+      
+      <input type="text" name="usuario" class="opcion-btn" placeholder="Nombre de usuario (Ej: juan.perez)" required>
+      <input type="text" name="password" class="opcion-btn" placeholder="Contraseña temporal" required>
+      
+      <select name="rol_cuenta" class="opcion-btn" required style="appearance: auto; background: var(--paper);">
+        <option value="" disabled selected>Selecciona el rol...</option>
+        <option value="practicante">Practicante (Nuevo Ingreso)</option>
+        <option value="trabajador">Trabajador (Equipo)</option>
+        <option value="jefe">Líder de Equipo / Jefe</option>
+      </select>
+
+      <!-- El botón inicia desactivado si el RUT está malo -->
+      <button type="submit" id="btn-submit" class="btn-reto-final" style="margin-top: 15px; width: 100%;">Crear Perfil</button>
+    </form>
+    
+    <div style="text-align: center; margin-top: 20px; display: flex; gap: 12px;">
+      <a href="{{ url_for('usuarios') }}" class="btn-reto-final" style="flex: 1; display: block; background: var(--steel); color: white;">👥 Ver Usuarios</a>
+      <a href="{{ url_for('ranking') }}" class="btn-reto-final" style="flex: 1; display: block; background: var(--steel); color: white;">Volver al Panel</a>
+    </div>
+  </div>
+
+<script>
+  function formatearYValidarRUT(input) {
+    // 1. Quitar todo lo que no sea número o la letra K
+    let valor = input.value.replace(/[^0-9kK]/g, '').toUpperCase();
+    
+    // 2. Formatear con puntos y guion
+    if (valor.length > 1) {
+      let cuerpo = valor.slice(0, -1);
+      let dv = valor.slice(-1);
+      input.value = cuerpo.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + "-" + dv;
+    } else {
+      input.value = valor;
+    }
+
+    // 3. Validar matemáticamente (Módulo 11 chileno)
+    const errorText = document.getElementById('rut-error');
+    const btnSubmit = document.getElementById('btn-submit');
+
+    // Si aún no ha escrito suficiente, no mostrar error
+    if (valor.length < 8) {
+      errorText.style.display = 'none';
+      btnSubmit.disabled = true;
+      btnSubmit.style.opacity = '0.5';
+      return;
+    }
+
+    let cuerpo = valor.slice(0, -1);
+    let dv = valor.slice(-1);
+    let suma = 0;
+    let multiplo = 2;
+
+    // Calcular dígito esperado
+    for (let i = 1; i <= cuerpo.length; i++) {
+      let index = multiplo * valor.charAt(cuerpo.length - i);
+      suma = suma + index;
+      if (multiplo < 7) { multiplo = multiplo + 1; } else { multiplo = 2; }
+    }
+
+    let dvEsperado = 11 - (suma % 11);
+    dv = (dv == 'K') ? 10 : dv;
+    dv = (dv == 0) ? 11 : dv;
+
+    // Comparar y bloquear el botón si está malo
+    if (dvEsperado != dv) {
+      errorText.style.display = 'block';
+      btnSubmit.disabled = true;
+      btnSubmit.style.opacity = '0.5';
+    } else {
+      errorText.style.display = 'none';
+      btnSubmit.disabled = false;
+      btnSubmit.style.opacity = '1';
+    }
+  }
+</script>
+</body>
+</html>

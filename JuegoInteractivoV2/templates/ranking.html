@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ranking · Innova</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<style>
+  .ranking-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: var(--paper-2);
+    color: var(--ink);
+  }
+  .ranking-table th, .ranking-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 2px solid var(--steel);
+  }
+  .ranking-table th {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--font-display);
+  }
+</style>
+</head>
+<body>
+  <div class="reporte-card" style="max-width: 800px;">
+    <div class="reporte-header">
+      <h1>Ranking de Resultados</h1>
+      <p style="color: var(--steel);">Top 20 mejores puntuaciones</p>
+    </div>
+
+    <table class="ranking-table">
+      <thead>
+        <tr>
+          <th>Nombre (Usuario)</th>
+          <th>Rol</th>
+          <th>Puntaje</th>
+          <th>Fecha</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for resultado in resultados %}
+        <tr>
+          <td><strong>{{ resultado.nombre }}</strong> ({{ resultado.usuario }})</td>
+          <td>{{ resultado.rol_juego }}</td>
+          <td><strong>{{ resultado.puntaje_final }}</strong> / {{ resultado.total_final }}</td>
+          <td>{{ resultado.fecha[:10] }}</td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="4" style="text-align: center;">Aún no hay resultados registrados.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div style="display: flex; gap: 15px; margin-top: 30px;">
+      {% if session['rol_cuenta'] == 'admin' %}
+      <a href="{{ url_for('usuarios') }}" class="btn-reto-final" style="flex: 1; text-align: center; font-size: 1rem; background: var(--steel); color: white;">👥 Ver Usuarios</a>
+      <a href="{{ url_for('crear_usuario') }}" class="btn-reto-final" style="flex: 1; text-align: center; font-size: 1rem; background: var(--ok); color: white;">+ Añadir Perfil</a>
+      {% endif %}
+      <a href="{{ url_for('logout') }}" class="btn-reto-final" style="flex: 1; text-align: center; background: var(--bad); color: white; font-size: 1rem;">Cerrar Sesión</a>
+    </div>
+  </div>
+</body>
+</html>

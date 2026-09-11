@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Usuarios · Innova</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<style>
+  .ranking-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: var(--paper-2);
+    color: var(--ink);
+  }
+  .ranking-table th, .ranking-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 2px solid var(--steel);
+  }
+  .ranking-table th {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--font-display);
+  }
+  .rol-tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    color: white;
+  }
+  .rol-admin { background: var(--bad); }
+  .rol-jefe { background: var(--steel); }
+  .rol-trabajador { background: var(--ok); }
+  .rol-practicante { background: var(--signal); color: var(--ink); }
+
+  .accion-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border: 2px solid var(--ink);
+    background: var(--paper);
+    cursor: pointer;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+  .accion-btn:hover { transform: translateY(-2px); }
+  .accion-editar:hover { background: var(--signal); }
+  .accion-eliminar:hover { background: var(--bad); }
+</style>
+</head>
+<body>
+  <div class="reporte-card" style="max-width: 900px;">
+    <div class="reporte-header">
+      <h1>Usuarios Registrados</h1>
+      <p style="color: var(--steel);">Total: {{ usuarios|length }} cuenta(s)</p>
+    </div>
+
+    <table class="ranking-table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>RUT</th>
+          <th>Usuario</th>
+          <th>Rol</th>
+          <th>Creado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for u in usuarios %}
+        <tr>
+          <td><strong>{{ u.nombre }}</strong></td>
+          <td>{{ u.rut or '—' }}</td>
+          <td>{{ u.usuario }}</td>
+          <td>
+            <span class="rol-tag rol-{{ u.rol_cuenta }}">{{ u.rol_cuenta }}</span>
+          </td>
+          <td>{{ u.fecha_creacion[:10] if u.fecha_creacion else '—' }}</td>
+          <td>
+            <div style="display: flex; gap: 8px;">
+              <a href="{{ url_for('editar_usuario', usuario_id=u.id) }}" class="accion-btn accion-editar" title="Editar">✏️</a>
+              <form method="POST" action="{{ url_for('eliminar_usuario', usuario_id=u.id) }}" onsubmit="return confirm('¿Seguro que quieres eliminar a {{ u.nombre }} ({{ u.usuario }})? Esta acción no se puede deshacer.');" style="margin:0;">
+                <button type="submit" class="accion-btn accion-eliminar" title="Eliminar">🗑️</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="6" style="text-align: center;">No hay usuarios registrados.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div style="display: flex; gap: 15px; margin-top: 30px;">
+      <a href="{{ url_for('crear_usuario') }}" class="btn-reto-final" style="flex: 1; text-align: center; font-size: 1rem; background: var(--ok); color: white;">+ Añadir Perfil</a>
+      <a href="{{ url_for('ranking') }}" class="btn-reto-final" style="flex: 1; text-align: center; font-size: 1rem; background: var(--steel); color: white;">Volver al Ranking</a>
+      <a href="{{ url_for('logout') }}" class="btn-reto-final" style="flex: 1; text-align: center; background: var(--bad); color: white; font-size: 1rem;">Cerrar Sesión</a>
+    </div>
+  </div>
+</body>
+</html>

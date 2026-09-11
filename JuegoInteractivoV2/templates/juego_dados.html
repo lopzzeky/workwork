@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reto Final · Innova</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<style>
+  /* Estilo para cuando una opción está seleccionada */
+  .opcion-btn.seleccionada {
+    background: var(--ink) !important;
+    color: var(--paper) !important;
+    border-color: var(--signal) !important;
+    border-left-width: 12px !important;
+    transform: translateX(4px);
+  }
+  
+  .btn-confirmar {
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+    background: var(--signal);
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: 15px;
+    border: 3px solid var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-confirmar:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--ink);
+  }
+</style>
+</head>
+<body>
+  <div class="mision-card" style="--accent-role: var(--signal);">
+    
+    <div class="mision-meta">
+      <span class="nivel">Reto de Atención Final</span>
+      <span class="contador" id="temporizador-ui">Misión Crítica</span>
+    </div>
+
+    <h3 class="mision-pregunta" id="pantalla-texto">
+      Este es el reto final. Tira los dados para definir tu tiempo límite y el nivel de dificultad.
+    </h3>
+
+    <div class="opciones" id="pantalla-opciones">
+      <button class="opcion-btn" id="btn-tirar" onclick="lanzarDados()" style="text-align: center; font-family: var(--font-display); font-weight: 700; font-size: 1.2rem; background: var(--signal); color: var(--ink); border-color: var(--ink);">
+        🎲 Tirar los Dados
+      </button>
+    </div>
+
+  </div>
+
+<script>
+  let tiempoRestante;
+  let tiempoInicial; 
+  let intervalo;
+  let tiempoTomado;
+  let preguntaActualData;
+  let opcionesSeleccionadas = []; 
+
+  // Convertimos las preguntas en una lista (Array) para que sea más fácil elegirlas al azar
+  const preguntas = [
+    {
+      texto: "Selecciona TODOS los elementos que debe portar el vehículo como minimo:",
+      opciones: ["Alicates", "Llaves", "Destornillador", "Cables", "Gata", "Extintor", "Chaleco geólogo"],
+      correctas: ["Alicates", "Llaves", "Destornillador", "Cables"]
+    },
+    {
+      texto: "Selecciona las acciones que están No ESTAN PROHIBIDAS en Innova:(Escoge 3 opciones)",
+      opciones: ["Tomar trabajos particulares con clientes","Llegar en estado de ebriedad", "Charlas motivacionales","Utilizar teléfonos personales con clientes","Celebrar el día de cumpleaños","Capacitaciones"],
+      correctas: ["Charlas motivacionales","Capacitaciones","Celebrar el día de cumpleaños"]
+    },
+    {
+      texto: "Selecciona las acciones que están ESTRICTAMENTE PROHIBIDAS en Innova: (Escoge 3 opciones)",
+      opciones: ["Tomar trabajos particulares con clientes","Llegar en estado de ebriedad","Pedir permisos con 24 horas de anticipación","Utilizar teléfonos personales con clientes","Celebrar el día de cumpleaños" ],
+      correctas: ["Tomar trabajos particulares con clientes","Llegar en estado de ebriedad","Utilizar teléfonos personales con clientes"]
+    },
+    {
+      texto: "Que habilidades y competencias debemos aplicar/desarrollar dentro de Innova System Spa? (Escoge 3 opciones)",
+      opciones: ["Creatividad e iniciativa","Inteligencia emocional","Desmotivación","Autodesarrollo","Rigidez"],
+      correctas:["Creatividad e iniciativa","Inteligencia emocional","Autodesarrollo"]
+    },
+    {
+      texto: "Recuerdas cuales son las 5s?",
+      opciones: [
+        "A) Clasificación, Excelencia, Limpieza, Estandarizar y Seguir mejorando",
+        "B) Seiri, Seiton, Seiso, Seiketsu, Shitsuke",
+        "C) Serio, Solidario, Sudon, Sabio, Sagaz",
+        "D) Correctamente, Acertadamente, Adecuadamente, Perfectamente, Estumendamente"],
+        correctas:["B) Seiri, Seiton, Seiso, Seiketsu, Shitsuke"]
+    }
+  ];
+
+  // Función para barajar el orden de las opciones (Fisher-Yates Shuffle)
+  function barajarArreglo(arreglo) {
+    let array = [...arreglo];
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  function lanzarDados() {
+    const divOpciones = document.getElementById('pantalla-opciones');
+    divOpciones.innerHTML = ''; 
+
+    let dadoTiempo = Math.floor(Math.random() * 6) + 1;
+    let dadoDificultad = Math.floor(Math.random() * 6) + 1;
+    
+    // Tiempo base
+    tiempoRestante = (dadoTiempo * 5) + 5; 
+    tiempoInicial = tiempoRestante; 
+    
+    // NUEVO RANDOM: Elegimos una pregunta al azar de nuestra lista
+    let indiceAleatorio = Math.floor(Math.random() * preguntas.length);
+    let preguntaElegida = preguntas[indiceAleatorio];
+
+    const textoPantalla = document.getElementById('pantalla-texto');
+    textoPantalla.innerHTML = `
+      <div style="text-align: center; color: var(--steel);">
+        <p style="font-size: 1.5rem; margin-bottom: 10px;">🎲 Dificultad: ${dadoDificultad}</p>
+        <p style="font-size: 1.5rem; margin-bottom: 20px;">⏱️ Tiempo: ${tiempoRestante} seg</p>
+        <p style="font-size: 1rem; color: var(--signal);">Prepárate, barajando opciones...</p>
+      </div>
+    `;
+
+    setTimeout(() => {
+      // Le pasamos la pregunta que salió sorteada
+      iniciarPrueba(preguntaElegida);
+    }, 3000);
+  }
+
+  function iniciarPrueba(datosPregunta) {
+    preguntaActualData = datosPregunta;
+    opcionesSeleccionadas = []; // Reiniciamos selección
+    
+    document.getElementById('pantalla-texto').innerText = datosPregunta.texto;
+    
+    const divOpciones = document.getElementById('pantalla-opciones');
+    divOpciones.innerHTML = ''; 
+    
+    // Barajar las opciones antes de mostrarlas
+    const opcionesBarajadas = barajarArreglo(datosPregunta.opciones);
+
+    opcionesBarajadas.forEach(opcion => {
+      let btn = document.createElement('button');
+      btn.className = 'opcion-btn';
+      btn.innerText = opcion;
+      
+      // Al hacer clic, marcamos/desmarcamos la opción
+      btn.onclick = () => toggleSeleccion(btn, opcion);
+      
+      divOpciones.appendChild(btn);
+    });
+
+    // Añadir el botón de confirmar
+    let btnConfirmar = document.createElement('button');
+    btnConfirmar.className = 'btn-confirmar';
+    btnConfirmar.innerText = '✔️ Confirmar Selección';
+    btnConfirmar.onclick = () => evaluarRespuestasMúltiples();
+    divOpciones.appendChild(btnConfirmar);
+
+    document.getElementById('temporizador-ui').innerText = `Tiempo: ${tiempoRestante}s`;
+    document.getElementById('temporizador-ui').style.color = 'var(--bad)'; 
+    
+    intervalo = setInterval(() => {
+      tiempoRestante--;
+      document.getElementById('temporizador-ui').innerText = `Tiempo: ${tiempoRestante}s`;
+      
+      if (tiempoRestante <= 0) {
+        clearInterval(intervalo);
+        alert("¡Tiempo agotado! Evaluando lo que alcanzaste a marcar...");
+        evaluarRespuestasMúltiples(); 
+      }
+    }, 1000);
+  }
+
+  function toggleSeleccion(btn, opcionTexto) {
+    // Si ya está seleccionada, la quitamos
+    const index = opcionesSeleccionadas.indexOf(opcionTexto);
+    if (index > -1) {
+      opcionesSeleccionadas.splice(index, 1);
+      btn.classList.remove('seleccionada');
+    } else {
+      // Si no está seleccionada, la agregamos
+      opcionesSeleccionadas.push(opcionTexto);
+      btn.classList.add('seleccionada');
+    }
+  }
+
+  function evaluarRespuestasMúltiples() {
+    clearInterval(intervalo);
+    
+    // Si el tiempo llegó a 0, el tiempo tomado es el total inicial
+    tiempoTomado = (tiempoRestante <= 0) ? tiempoInicial : (tiempoInicial - tiempoRestante); 
+
+    // Verificamos respuestas correctas
+    const esCorrecto = (opcionesSeleccionadas.length === preguntaActualData.correctas.length) &&
+                       opcionesSeleccionadas.every(val => preguntaActualData.correctas.includes(val));
+
+    if (esCorrecto) {
+      alert("✅ ¡Perfecto! Identificaste todas las opciones correctamente bajo presión.");
+    } else {
+      alert("❌ Incorrecto. Te faltaron opciones o seleccionaste elementos equivocados.");
+    }
+    
+    finalizarReto();
+  }
+
+  function finalizarReto() {
+    let textoRapidez = "";
+    if (tiempoRestante <= 0) {
+        textoRapidez = "🐢 Rapidez: Crítica (Tiempo agotado)";
+    } else if (tiempoTomado <= 5) {
+        textoRapidez = "⚡ Rapidez: Alta (¡Reflejos excelentes!)";
+    } else if (tiempoTomado <= 10) {
+        textoRapidez = "⏱️ Rapidez: Media (Ritmo aceptable)";
+    } else {
+        textoRapidez = "🚶 Rapidez: Baja (Decisiones lentas)";
+    }
+
+    document.getElementById('pantalla-texto').innerHTML = `
+      Reto finalizado. El reporte de tu práctica está listo.
+      <br><br>
+      <div style="background: var(--paper-2); padding: 15px; border-radius: 8px; border-left: 5px solid var(--signal); color: var(--ink); text-align: left; margin-top: 15px;">
+        <strong style="font-family: var(--font-display);">Diagnóstico de terreno:</strong><br>
+        <span style="font-size: 1.1rem;">${textoRapidez}</span> <br>
+        <em style="color: var(--steel);">Tardaste ${tiempoTomado} segundos en actuar.</em>
+      </div>
+    `;
+    
+    document.getElementById('temporizador-ui').innerText = "Misión Completada";
+    document.getElementById('temporizador-ui').style.color = 'var(--steel)';
+    
+    const divOpciones = document.getElementById('pantalla-opciones');
+    divOpciones.innerHTML = `
+      <a href="{{ url_for('resultado') }}" class="btn-reiniciar" style="margin-top: 20px;">
+        Ver Resultados y Finalizar
+      </a>
+    `;
+  }
+</script>
+</body>
+</html>

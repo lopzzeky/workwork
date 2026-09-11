@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Registro · Innova</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="mision-card">
+    <h2 class="inicio-titulo" style="text-align: center; margin-bottom: 20px;">Crear Cuenta</h2>
+    
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div style="color: var(--bad); text-align: center; margin-bottom: 15px; font-weight: bold;">
+        {% for message in messages %}
+          {{ message }}
+        {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" class="opciones">
+      <!-- El backend espera: nombre, usuario, password, rol_cuenta -->
+      <input type="text" name="nombre" class="opcion-btn" placeholder="Nombre completo" required>
+      <input type="text" name="usuario" class="opcion-btn" placeholder="Nombre de usuario" required>
+      <input type="password" name="password" class="opcion-btn" placeholder="Contraseña" required>
+      
+      <select name="rol_cuenta" class="opcion-btn" required style="appearance: auto; background: var(--paper);">
+        <option value="" disabled selected>Selecciona tu rol...</option>
+        <option value="practicante">Practicante (Nuevo Ingreso)</option>
+        <option value="trabajador">Trabajador (Equipo)</option>
+        <option value="jefe">Líder de Equipo / Jefe</option>
+      </select>
+
+      <button type="submit" class="btn-reto-final" style="margin-top: 15px; width: 100%;">Registrarse</button>
+    </form>
+    
+    <div style="text-align: center; margin-top: 20px;">
+      <a href="{{ url_for('login') }}" style="color: var(--ink);">¿Ya tienes cuenta? Inicia sesión</a>
+    </div>
+  </div>
+</body>
+</html>

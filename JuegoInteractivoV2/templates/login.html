@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ 'Login Administrador' if modo_admin else 'Login' }} · Innova</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="mision-card">
+    <h2 class="inicio-titulo" style="text-align: center; margin-bottom: 20px;">
+      {{ 'Acceso Administrador' if modo_admin else 'Iniciar Sesión' }}
+    </h2>
+    
+    <!-- Muestra los mensajes de error (flash) -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div style="color: var(--bad); text-align: center; margin-bottom: 15px; font-weight: bold;">
+        {% for message in messages %}
+          {{ message }}
+        {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('login_admin') if modo_admin else url_for('login') }}" class="opciones" autocomplete="off">
+      <input type="text" name="usuario" class="opcion-btn" placeholder="Nombre de usuario" autocomplete="off" required>
+      <input type="password" name="password" class="opcion-btn" placeholder="Contraseña" autocomplete="new-password" required>
+      <button type="submit" class="btn-reto-final" style="margin-top: 15px; width: 100%;">Ingresar</button>
+    </form>
+
+    <div style="text-align: center; margin-top: 18px;">
+      {% if modo_admin %}
+      <a href="{{ url_for('login') }}" style="color: var(--steel); font-size: 0.9rem; text-decoration: underline;">
+        ← Volver al login normal
+      </a>
+      {% else %}
+      <a href="{{ url_for('login_admin') }}" style="color: var(--steel); font-size: 0.9rem; text-decoration: underline;">
+        🔑 Iniciar como Administrador
+      </a>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Informe de campo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="reporte-card">
+    {% set aprobado = puntaje >= (total / 2) %}
+    <div class="stamp {{ 'ok' if aprobado else 'bad' }}">{{ 'Aprobado' if aprobado else 'A reforzar' }}</div>
+
+    <div class="reporte-header">
+      <h1>Informe de campo</h1>
+      <p class="reporte-puntaje">{{ puntaje }} <span>de {{ total }}</span></p>
+    </div>
+
+    <div class="reporte-lista">
+      {% for item in historial %}
+      <div class="reporte-item {{ 'correcta' if item.es_correcta else 'incorrecta' }}">
+        <div class="fila-marca">
+          <span class="marca {{ 'correcta' if item.es_correcta else 'incorrecta' }}">{{ '✓' if item.es_correcta else '✕' }}</span>
+          <p>{{ item.pregunta }}</p>
+        </div>
+        <p>Tu respuesta: {{ item.tu_respuesta }}</p>
+        {% if not item.es_correcta %}
+        <p class="correcta-txt">Respuesta correcta: {{ item.respuesta_correcta }}</p>
+        {% endif %}
+        <p class="explicacion">{{ item.explicacion }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    <a href="/" class="btn-reiniciar">Elegir otro rol</a>
+  </div>
+</body>
+</html>
